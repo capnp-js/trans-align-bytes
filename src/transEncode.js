@@ -1,11 +1,10 @@
 /* @flow */
 
+import type { BytesR } from "@capnp-js/bytes";
 import type {
   Source,
   AsyncIteratorTransform,
 } from "@capnp-js/transform";
-
-import type { WordAlignedU8Array } from "./TransformCore";
 
 import { PULL_STREAM_BROKE_PROTOCOL } from "@capnp-js/transform";
 
@@ -14,8 +13,8 @@ import TransformCore from "./TransformCore";
 
 type uint = number;
 
-export default function transEncode(wordSize: uint): AsyncIteratorTransform<Uint8Array, WordAlignedU8Array> {
-  return function transform(source: Source<Uint8Array>): Source<WordAlignedU8Array> {
+export default function transEncode(wordSize: uint): AsyncIteratorTransform<BytesR, BytesR> {
+  return function transform(source: Source<BytesR>): Source<BytesR> {
     const status: {|
       doned: null | Error,
       done: null | true,
@@ -24,11 +23,11 @@ export default function transEncode(wordSize: uint): AsyncIteratorTransform<Uint
       done: null,
     };
 
-    let next: WordAlignedU8Array | null = null;
+    let next: BytesR | null = null;
 
     const core = new TransformCore(wordSize);
 
-    return function aligned(abort: null | true, put: (null | (true | Error), WordAlignedU8Array) => void): void {
+    return function aligned(abort: null | true, put: (null | (true | Error), BytesR) => void): void {
       if (status.doned) {
         put(status.doned, EMPTY);
         return;

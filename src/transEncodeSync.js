@@ -1,26 +1,25 @@
 /* @flow */
 
+import type { BytesR } from "@capnp-js/bytes";
 import type {
   IteratorTransform,
   SugarlessIterator,
   SugarlessIteratorResult,
 } from "@capnp-js/transform";
 
-import type { WordAlignedU8Array } from "./TransformCore";
-
 import TransformCore from "./TransformCore";
 
 type uint = number;
 
-export default function transEncodeSync(wordSize: uint): IteratorTransform<Uint8Array, WordAlignedU8Array> {
-  return function transform(source: SugarlessIterator<Uint8Array>): SugarlessIterator<WordAlignedU8Array> {
+export default function transEncodeSync(wordSize: uint): IteratorTransform<BytesR, BytesR> {
+  return function transform(source: SugarlessIterator<BytesR>): SugarlessIterator<BytesR> {
     let done = false;
-    let next: WordAlignedU8Array | null = null;
+    let next: BytesR | null = null;
 
     const core = new TransformCore(wordSize);
 
     return {
-      next(): SugarlessIteratorResult<WordAlignedU8Array> {
+      next(): SugarlessIteratorResult<BytesR> {
         if (done) {
           return { done };
         }

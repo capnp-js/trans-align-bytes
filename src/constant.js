@@ -1,6 +1,8 @@
 /* @flow */
 
-export const EMPTY = new Uint8Array(0);
+import { create } from "@capnp-js/bytes";
+
+export const EMPTY = create(0);
 
 /* Single byte words may be silly, but silliness isn't an error. */
 export const WORD_SIZE_ERROR =

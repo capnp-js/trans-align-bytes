@@ -3,6 +3,7 @@
 import * as assert from "assert";
 import Prando from "prando";
 import { describe, it } from "mocha";
+import { create, getSubarray } from "@capnp-js/bytes";
 import { array } from "@capnp-js/trans-inject";
 
 import transEncodeSync from "../../src/transEncodeSync";
@@ -13,13 +14,13 @@ describe("transEncodeSync", function () {
   for (let i=0; i<5000; ++i) {
     it(`decodes random data i=${i}`, function () {
       const length = random.nextInt(0, 200);
-      const raw = new Uint8Array(length);
+      const raw = create(length);
 
       const buffers = [];
       let cut = 0;
       while (cut < length) {
         const next = Math.min(cut + random.nextInt(0, 50), length);
-        buffers.push(raw.subarray(cut, next));
+        buffers.push(getSubarray(cut, next, raw));
         cut = next;
       }
 
